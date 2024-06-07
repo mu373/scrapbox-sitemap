@@ -1,0 +1,17 @@
+{
+    "$schema": "https://raw.githubusercontent.com/skymethod/denoflare/v0.6.0/common/config.schema.json",
+    "scripts": {
+        "scrapbox-minami-public-sitemap": {
+            "path": "./index.ts",
+            "bindings": {
+                "SCRAPBOX_PROJECT": { "value": "minami-public" },
+            }
+        }
+    },
+    "profiles": {
+        "account1": {
+            "accountId": "cloudflare_account_id",
+            "apiToken": "cloudflare_api_token"
+        }
+    }
+}
