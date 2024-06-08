@@ -2,6 +2,9 @@ name: Generate sitemap
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '15 21 * * *' # JST 6:15
+
   
 env:
   SID: ${{ secrets.SID }}
