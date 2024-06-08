@@ -1,32 +1,15 @@
 import { Hono } from "https://deno.land/x/hono@v4.3.11/mod.ts";
-import { env } from "https://deno.land/x/hono@v4.3.11/helper/adapter/index.ts";
 
 const app = new Hono();
 
-function replaceScrapboxLinks(str: string, projectName: string) {
-  const regex = new RegExp(
-    `<link>https:\\/\\/scrapbox\\.io\\/${projectName}(?:\\/([^<]+))?<\\/link>`,
-    "g",
-  );
-  return str.replace(regex, (match, page) => {
-    return `<link>https://minami.me/scrapbox/${projectName}${
-      page ? `/p/${page}` : ""
-    }</link>`;
-  });
-}
-
 app.get("/*", async (c) => {
-  const ENV = env(c)
-  const projectName:any= ENV.SCRAPBOX_PROJECT
-
-  const apiurl = `https://scrapbox.io/api/feed/${projectName}`;
-  const response = await fetch(apiurl);
+  const sitemapUrl = "https://mu373.github.io/scrapbox-sitemap/sitemap.xml";
+  const response = await fetch(sitemapUrl);
 
   if (response.ok) {
     console.log("Fetched RSS");
-    let rssbody = await response.text();
-    const newRssBody = replaceScrapboxLinks(rssbody, projectName);
-    return new Response(newRssBody, {
+    let rssBody = await response.text();
+    return new Response(rssBody, {
       status: 200,
       headers: { "Content-Type": "application/xml" },
     });

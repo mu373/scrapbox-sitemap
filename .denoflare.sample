@@ -3,9 +3,6 @@
     "scripts": {
         "scrapbox-minami-public-sitemap": {
             "path": "./index.ts",
-            "bindings": {
-                "SCRAPBOX_PROJECT": { "value": "minami-public" },
-            }
         }
     },
     "profiles": {
