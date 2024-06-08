@@ -38,6 +38,6 @@ for (const page of pages) {
 const feedRss = sitemapFeed.rss2();
 console.log(feedRss);
 
-const exportFilePath = "./sitemap.xml";
+const exportFilePath = "./out/sitemap.xml";
 const write = Deno.writeTextFile(exportFilePath, feedRss);
 write.then(() => console.log(`File written to ${exportFilePath}`));
