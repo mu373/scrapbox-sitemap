@@ -5,7 +5,7 @@
     - Export Scrapbox project as JSON
     - Create a sitemap RSS feed
     - Deploy feed to [GitHub pages](https://mu373.github.io/scrapbox-sitemap/sitemap.xml)
-- Serve sitemap feed at custom domain (CloudFlare workers)
+- Serve sitemap feed at custom domain (Cloudflare Workers)
 
 ## Configuration
 - Cloudflare API token
