@@ -1,0 +1,37 @@
+name: Generate sitemap
+
+on:
+  workflow_dispatch:
+  
+env:
+  SID: ${{ secrets.SID }}
+  PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        # uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@61fe2df320078202e33d7d5ad347e7dcfa0e8f31  # v1.1.2
+        with:
+          deno-version: v1.x
+
+      - name: Make output directory 
+        run: mkdir -p sitemap/out
+        
+      - name: Generate sitemap.xml
+        run: cd sitemap && deno run --allow-net=scrapbox.io --allow-read=./ --allow-write --allow-env index.ts
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './out/'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
