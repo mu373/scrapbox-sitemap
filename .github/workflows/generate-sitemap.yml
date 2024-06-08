@@ -7,6 +7,11 @@ env:
   SID: ${{ secrets.SID }}
   PROJECT_NAME: ${{ vars.PROJECT_NAME }}
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  
 jobs:
   sitemap:
     runs-on: ubuntu-latest
