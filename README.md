@@ -1,7 +1,11 @@
 <!-- deno-fmt-ignore-file -->
 # scrapbox-sitemap
 
-Create a sitemap (RSS) for search engines to crawl through the Scrapbox/Cosense project. Uses Deno, Hono, Denoflare, and Cloudflare Workers.
+- Generate Scrapbox sitemap (GitHub Actions)
+    - Export Scrapbox project as JSON
+    - Create a sitemap RSS feed
+    - Deploy feed to [GitHub pages](https://mu373.github.io/scrapbox-sitemap/sitemap.xml)
+- Serve sitemap feed at custom domain (CloudFlare workers)
 
 ## Configuration
 - Cloudflare API token
