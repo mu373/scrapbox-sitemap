@@ -4,6 +4,7 @@ import { Feed } from "npm:feed";
 const sid = Deno.env.get("SID");
 const projectName = Deno.env.get("PROJECT_NAME");
 const urlPrefix = `https://minami.me/scrapbox/${projectName}/p/`;
+const originalUrlPrefix = `https://scrapbox.io/${projectName}/`;
 assert(sid, is.String);
 assert(projectName, is.String);
 
@@ -32,6 +33,7 @@ for (const page of pages) {
   sitemapFeed.addItem({
     title: page.title,
     link: `${urlPrefix}${page.title}`,
+    guid: `${originalUrlPrefix}${page.title}`,
   });
 }
 
