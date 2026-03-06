@@ -8,6 +8,7 @@ on:
 env:
   SID: ${{ secrets.SID }}
   PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+  EXPORT_JSON_PATH: export.json
 
 permissions:
   contents: read
@@ -27,11 +28,21 @@ jobs:
         with:
           deno-version: v1.x
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Download latest export json from S3
+        working-directory: sitemap
+        run: aws s3 cp s3://${{ vars.S3_BUCKET }}/${{ vars.S3_PREFIX }}/${{ vars.PROJECT_NAME }}/latest.json export.json
+
       - name: Make output directory
         run: mkdir -p sitemap/out
 
       - name: Generate sitemap.xml
-        run: cd sitemap && deno run --allow-net=scrapbox.io --allow-read=./ --allow-write --allow-env index.ts
+        run: cd sitemap && deno run --allow-read=./ --allow-write --allow-env index.ts
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -1,12 +1,18 @@
-import { assert, exportPages, importPages, is } from "./deps.ts";
-import { Feed } from "npm:feed";
+import "jsr:@std/dotenv@0.225.6/load";
+import { exportPages } from "./scrapbox.ts";
+import { Feed } from "npm:feed@5.2.0";
 
 const sid = Deno.env.get("SID");
+const exportJsonPath = Deno.env.get("EXPORT_JSON_PATH");
 const projectName = Deno.env.get("PROJECT_NAME");
+if (!projectName) {
+  throw new Error("PROJECT_NAME is required");
+}
+if (!exportJsonPath && !sid) {
+  throw new Error("SID is required when EXPORT_JSON_PATH is not set");
+}
 const urlPrefix = `https://minami.me/scrapbox/${projectName}/p/`;
 const originalUrlPrefix = `https://scrapbox.io/${projectName}/`;
-assert(sid, is.String);
-assert(projectName, is.String);
 
 const sitemapFeed = new Feed({
   title: "minami-public | Scrapbox",
@@ -15,18 +21,27 @@ const sitemapFeed = new Feed({
   updated: new Date(),
 });
 
-console.log(`Exporting a json file from "/${projectName}"...`);
-const result = await exportPages(projectName, {
-  sid,
-  metadata: true,
-});
-if (!result.ok) {
-  const error = new Error();
-  error.name = `${result.value.name} when exporting a json file`;
-  error.message = result.value.message;
-  throw error;
+let pages: Array<{ title: string }>;
+if (exportJsonPath) {
+  console.log(`Reading pages from "${exportJsonPath}"...`);
+  const raw = await Deno.readTextFile(exportJsonPath);
+  const parsed = JSON.parse(raw);
+  pages = parsed.pages;
+} else {
+  console.log(`Exporting a json file from "/${projectName}"...`);
+  const result = await exportPages(projectName, {
+    sid: sid!,
+    metadata: true,
+  });
+  if (!result.ok) {
+    const error = new Error();
+    error.name = `${result.value.name} when exporting a json file`;
+    error.message = result.value.message;
+    throw error;
+  }
+  pages = result.value.pages;
 }
-const { pages } = result.value;
+
 console.log(`Total pages: ${pages.length}`);
 
 for (const page of pages) {
@@ -34,6 +49,7 @@ for (const page of pages) {
     title: page.title,
     link: `${urlPrefix}${page.title}`,
     guid: `${originalUrlPrefix}${page.title}`,
+    date: new Date(),
   });
 }
 
