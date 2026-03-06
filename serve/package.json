@@ -1,0 +1,14 @@
+{
+  "name": "scrapbox-sitemap-serve",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "hono": "^4.7.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
