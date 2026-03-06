@@ -8,6 +8,7 @@ on:
 env:
   SID: ${{ secrets.SID }}
   PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+  EXPORT_JSON_PATH: export.json
 
 permissions:
   contents: read
@@ -26,6 +27,16 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Download latest export json from S3
+        working-directory: sitemap
+        run: aws s3 cp s3://${{ secrets.S3_BUCKET }}/${{ secrets.S3_PREFIX }}/${{ vars.PROJECT_NAME }}/latest.json export.json
 
       - name: Make output directory
         run: mkdir -p sitemap/out
