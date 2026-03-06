@@ -3,9 +3,8 @@ name: Generate sitemap
 on:
   workflow_dispatch:
   schedule:
-    - cron: '15 21 * * *' # JST 6:15
+    - cron: "15 21 * * *" # JST 6:15
 
-  
 env:
   SID: ${{ secrets.SID }}
   PROJECT_NAME: ${{ vars.PROJECT_NAME }}
@@ -14,7 +13,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  
+
 jobs:
   sitemap:
     runs-on: ubuntu-latest
@@ -28,17 +27,17 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Make output directory 
+      - name: Make output directory
         run: mkdir -p sitemap/out
-        
+
       - name: Generate sitemap.xml
         run: cd sitemap && deno run --allow-net=scrapbox.io --allow-read=./ --allow-write --allow-env index.ts
-      
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './sitemap/out/'
-          
+          path: "./sitemap/out/"
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
