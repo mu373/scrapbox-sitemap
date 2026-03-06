@@ -42,7 +42,7 @@ jobs:
         run: mkdir -p sitemap/out
 
       - name: Generate sitemap.xml
-        run: cd sitemap && deno run --allow-read=./ --allow-write --allow-env index.ts
+        run: cd sitemap && deno run --allow-net=scrapbox.io --allow-read=./ --allow-write --allow-env index.ts
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
