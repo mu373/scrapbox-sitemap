@@ -1,1 +1,2 @@
-.denoflare
+node_modules
+.wrangler

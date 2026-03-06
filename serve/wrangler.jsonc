@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "scrapbox-minami-public-sitemap",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-03-05",
+  "routes": [
+    { "pattern": "minami.me/scrapbox/minami-public/sitemap/*", "zone_name": "minami.me" }
+  ]
+}
