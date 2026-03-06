@@ -35,8 +35,14 @@ jobs:
           aws-region: us-east-1
 
       - name: Download latest export json from S3
+        id: s3-download
+        continue-on-error: true
         working-directory: sitemap
         run: aws s3 cp s3://${{ secrets.S3_BUCKET }}/${{ secrets.S3_PREFIX }}/${{ vars.PROJECT_NAME }}/latest.json export.json
+
+      - name: Unset EXPORT_JSON_PATH if S3 download failed
+        if: steps.s3-download.outcome == 'failure'
+        run: echo "EXPORT_JSON_PATH=" >> $GITHUB_ENV
 
       - name: Make output directory
         run: mkdir -p sitemap/out
